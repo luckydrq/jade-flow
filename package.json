@@ -1,0 +1,12 @@
+{
+  "name": "jade-flow",
+  "version": "0.1.0",
+  "keywords": [
+    "pipeline",
+    "jade"
+  ],
+  "dependencies": {
+    "jade-lexer": "0.0.8",
+    "jade-parser": "0.0.8"
+  }
+}
