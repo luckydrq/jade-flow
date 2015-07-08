@@ -6,7 +6,9 @@
     "jade"
   ],
   "dependencies": {
+    "co": "^4.5.4",
     "jade-lexer": "0.0.8",
-    "jade-parser": "0.0.8"
+    "jade-parser": "0.0.8",
+    "koa-compose": "^2.3.0"
   }
 }
