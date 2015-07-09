@@ -15,7 +15,7 @@ var compose = require('../lib/compose');
  */
 var task1 = new Task({
   name: 'task1',
-  attrs: {},
+  attrs: [],
   children: [],
   middleware: function *(next) {
     console.log('task1 begin');
@@ -26,7 +26,7 @@ var task1 = new Task({
 
 var task2 = new Task({
   name: 'task2',
-  attrs: {},
+  attrs: [],
   children: [],
   middleware: function *(next) {
     console.log('task2 begin');
@@ -37,7 +37,7 @@ var task2 = new Task({
 
 var task3 = new Task({
   name: 'task3',
-  attrs: {},
+  attrs: [],
   children: [],
   middleware: function *(next) {
     console.log('task3 begin');
@@ -48,7 +48,7 @@ var task3 = new Task({
 
 var task4 = new Task({
   name: 'task4',
-  attrs: {},
+  attrs: [],
   children: [],
   middleware: function *(next) {
     console.log('task4 begin');
@@ -59,7 +59,7 @@ var task4 = new Task({
 
 var task5 = new Task({
   name: 'task5',
-  attrs: {},
+  attrs: [],
   children: [],
   middleware: function *(next) {
     console.log('task5 begin');
@@ -70,7 +70,7 @@ var task5 = new Task({
 
 var task6 = new Task({
   name: 'task6',
-  attrs: {},
+  attrs: [],
   children: [],
   middleware: function *(next) {
     console.log('task6 begin');
