@@ -6,7 +6,12 @@
     "jade"
   ],
   "scripts": {
-    "test": "DEBUG=flow* mocha --harmony test/flow.test.js"
+    "test": "mocha --harmony test/flow.test.js"
+  },
+  "author": "luckydrq<drqzju@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:luckydrq/jade-flow.git"
   },
   "dependencies": {
     "co": "^4.5.4",

@@ -5,6 +5,7 @@ var fs = require('fs');
 var co = require('co');
 var compose = require('./lib/compose');
 var Task = require('./lib/task');
+var format = require('util').format;
 var lexer = require('jade-lexer');
 var parse = require('jade-parser');
 var debug = require('debug')('flow');
@@ -36,7 +37,7 @@ Flow.prototype.buildTasks = function buildTasks() {
   }
 
   if (!fs.existsSync(file)) {
-    throw new Error('can not find file: ' + file);
+    throw new Error(format('can not find file: %s', file));
   }
 
   var filename = path.basename(file);
@@ -66,11 +67,20 @@ Flow.prototype.loadTasks = function loadTasks(ast) {
     }
 
     // load middleware
-    var middleware = require(path.join(taskDir, task.name));
+    var middleware;
+    try {
+      // 先从taskDir里找，找不到再从node_modules里找
+      middleware = require(path.join(taskDir, task.name));
+    } catch(e) {
+      middleware = require(task.name);
+    }
     if (isFunction(middleware) && !isGeneratorFunction(middleware)) {
       middleware = middleware.apply(null, task.attrs.map(function(attr) {
         return attr.val;
       }));
+    }
+    if (!isGeneratorFunction(middleware)) {
+      throw new Error(format('task %s: middleware is not a generator function', task.name));
     }
     task.middleware = middleware;
 
