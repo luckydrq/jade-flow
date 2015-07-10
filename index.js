@@ -5,6 +5,7 @@ var fs = require('fs');
 var co = require('co');
 var compose = require('./lib/compose');
 var Task = require('./lib/task');
+var context = require('./lib/context');
 var format = require('util').format;
 var lexer = require('jade-lexer');
 var parse = require('jade-parser');
@@ -22,12 +23,16 @@ function Flow(options) {
   this.encoding = options.encoding || 'utf8';
   this.taskDir = options.taskDir || path.join(process.cwd(), 'tasks');
   this.tasks = [];
+  this.inited = false;
 
   this.init();
 }
 
 Flow.prototype.init = function init() {
+  if (this.inited) return;
+
   this.buildTasks();
+  this.inited = true;
 };
 
 Flow.prototype.buildTasks = function buildTasks() {
@@ -75,15 +80,17 @@ Flow.prototype.loadTasks = function loadTasks(ast) {
       middleware = require(task.name);
     }
     if (isFunction(middleware) && !isGeneratorFunction(middleware)) {
-      middleware = middleware.apply(null, task.attrs.map(function(attr) {
-        return attr.val;
-      }));
+      middleware = middleware.call(null, task.attrs.reduce(function(prev, curr) {
+        var key = curr.name;
+        var value = curr.val;
+        prev[key] = value;
+        return prev;
+      }, {}));
     }
     if (!isGeneratorFunction(middleware)) {
       throw new Error(format('task %s: middleware is not a generator function', task.name));
     }
     task.middleware = middleware;
-
     tasks.push(task);
   });
 
@@ -97,9 +104,19 @@ Flow.prototype.run = function run(ctx) {
     return Promise.resolve();
   }
 
-  ctx = ctx || {};
+  ctx = createContext(ctx);
 
-  return co.call(ctx, compose(this.tasks));
+  return co.call(ctx, compose(this.tasks))
+    .then(function() {
+      return Promise.resolve(ctx);
+    });
+};
+
+Flow.prototype.toMiddleware = function toMiddleware() {
+  if (!this.inited) {
+    this.init();
+  }
+  return compose(this.tasks);
 };
 
 function isFunction(fn) {
@@ -108,4 +125,14 @@ function isFunction(fn) {
 
 function isGeneratorFunction(fn) {
   return isFunction(fn) && fn.constructor.name === 'GeneratorFunction';
+}
+
+function createContext(ctx) {
+  ctx = ctx || {};
+
+  if (Object.setPrototypeOf) {
+    Object.setPrototypeOf(ctx, context);
+  } else {
+    ctx.__proto__ = context;
+  }
 }

@@ -3,6 +3,7 @@
 var assert = require('assert');
 var path = require('path');
 var Flow = require('..');
+var debug = require('debug')('flow:test');
 
 describe('flow test', function() {
   it('should work', function() {
@@ -12,7 +13,8 @@ describe('flow test', function() {
     });
 
     flow.run()
-    .then(function() {
+    .then(function(ctx) {
+      debug("context: %o", ctx);
       done();
     })
     .catch(function(err) {

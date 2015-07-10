@@ -4,7 +4,7 @@ var assert = require('assert');
 var co = require('co');
 var Task = require('../lib/task');
 var compose = require('../lib/compose');
-var debug = require('debug')('flow:compose:test');
+var debug = require('debug')('flow:test:compose');
 
 /**
  * <task1>
