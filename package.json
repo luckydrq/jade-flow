@@ -6,7 +6,7 @@
     "jade"
   ],
   "scripts": {
-    "test": "mocha --harmony test/flow.test.js"
+    "test": "DEBUG=flow* mocha --harmony test/*.test.js"
   },
   "author": "luckydrq<drqzju@gmail.com>",
   "repository": {

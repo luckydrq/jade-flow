@@ -4,6 +4,7 @@ var assert = require('assert');
 var co = require('co');
 var Task = require('../lib/task');
 var compose = require('../lib/compose');
+var debug = require('debug')('flow:compose:test');
 
 /**
  * <task1>
@@ -13,14 +14,19 @@ var compose = require('../lib/compose');
  *   <task5>
  * <task6>
  */
+var i = 0;
 var task1 = new Task({
   name: 'task1',
   attrs: [],
   children: [],
   middleware: function *(next) {
-    console.log('task1 begin');
+    debug('task1 begin');
+    ++i;
+    assert(i === 1);
     yield *next;
-    console.log('task1 end');
+    ++i;
+    assert(i === 12);
+    debug('task1 end');
   }
 });
 
@@ -29,9 +35,13 @@ var task2 = new Task({
   attrs: [],
   children: [],
   middleware: function *(next) {
-    console.log('task2 begin');
+    debug('task2 begin');
+    ++i;
+    assert(i === 2);
     yield *next;
-    console.log('task2 end');
+    ++i;
+    assert(i === 9);
+    debug('task2 end');
   }
 });
 
@@ -40,9 +50,13 @@ var task3 = new Task({
   attrs: [],
   children: [],
   middleware: function *(next) {
-    console.log('task3 begin');
+    debug('task3 begin');
+    ++i;
+    assert(i === 3);
     yield *next;
-    console.log('task3 end');
+    ++i;
+    assert(i === 6);
+    debug('task3 end');
   }
 });
 
@@ -51,9 +65,13 @@ var task4 = new Task({
   attrs: [],
   children: [],
   middleware: function *(next) {
-    console.log('task4 begin');
+    ++i;
+    assert(i === 4);
+    debug('task4 begin');
     yield *next;
-    console.log('task4 end');
+    ++i;
+    assert(i === 5);
+    debug('task4 end');
   }
 });
 
@@ -62,9 +80,13 @@ var task5 = new Task({
   attrs: [],
   children: [],
   middleware: function *(next) {
-    console.log('task5 begin');
+    debug('task5 begin');
+    ++i;
+    assert(i === 7);
     yield *next;
-    console.log('task5 end');
+    ++i;
+    assert(i === 8);
+    debug('task5 end');
   }
 });
 
@@ -73,9 +95,13 @@ var task6 = new Task({
   attrs: [],
   children: [],
   middleware: function *(next) {
-    console.log('task6 begin');
+    debug('task6 begin');
+    ++i;
+    assert(i === 10);
     yield *next;
-    console.log('task6 end');
+    ++i;
+    assert(i === 11);
+    debug('task6 end');
   }
 });
 
