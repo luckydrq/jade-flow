@@ -75,6 +75,9 @@ Flow.prototype._buildTasks = function _buildTasks() {
 Flow.prototype._loadTasks = function _loadTasks(ast) {
   var self = this;
   var taskDir = this.taskDir;
+  if (!isAbsolute(taskDir)) {
+    taskDir = path.join(process.cwd(), taskDir);
+  }
   var tasks = [];
   var nodes = ast.nodes.filter(function(node) {
     return node.type === 'Tag';
@@ -100,7 +103,7 @@ Flow.prototype._loadTasks = function _loadTasks(ast) {
     if (isFunction(middleware) && !isGeneratorFunction(middleware)) {
       middleware = middleware.call(null, task.attrs.reduce(function(prev, curr) {
         var key = curr.name;
-        var value = curr.val;
+        var value = replaceQuote(curr.val);
         prev[key] = value;
         return prev;
       }, {}));
@@ -167,4 +170,10 @@ function createContext(ctx) {
   } else {
     ctx.__proto__ = context;
   }
+
+  return ctx;
+}
+
+function replaceQuote(val) {
+  return val.replace(/^(['"])(.*)\1$/, '$2');
 }

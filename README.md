@@ -1,12 +1,14 @@
 # jade-flow
 A powerful control flow model described by [jade syntax](https://github.com/jadejs/jade).Inspired by [koa](https://github.com/koajs/koa).
 
+You can write middleware/task in the same way as `koa middleware`.
+
 ## Control flow in Koa
 As we all know in koa, the control flow goes like this:
 
 ![](https://camo.githubusercontent.com/d80cf3b511ef4898bcde9a464de491fa15a50d06/68747470733a2f2f7261772e6769746875622e636f6d2f66656e676d6b322f6b6f612d67756964652f6d61737465722f6f6e696f6e2e706e67)
 
-Let's say it looks like a `U` shape as below:
+Let's say it looks like a `U` shape:
 
 ![](https://img.alicdn.com/tps/TB1Bp8WIFXXXXbPXFXXXXXXXXXX.png)
 
@@ -25,7 +27,7 @@ It provides much more flexibilities and allows the control flow go like a `W` sh
 ![](https://img.alicdn.com/tps/TB1e4avIFXXXXcpXXXXXXXXXXXX.png)
 
 Actually, you can make it whatever you want. All you need is a XML
-file to descirbe it. 
+file to descirbe it.
 
 For **pic a** as shown above, we can describe the flow like this:
 ```
@@ -43,12 +45,21 @@ middleware2
   middleware3
 ```
 
-## Why jade?
-Because it is convienient to write XML using its syntax. By using its [lexer](https://github.com/jadejs/jade-lexer) and [parser](https://github.com/jadejs/jade-parser), 
+If you want it to behave as koa style, just describe it like this:
+```
+middleware1
+middleware2
+middleware3
+```
 
+## Why jade?
+Because it is convienient to write XML using its syntax. By using its [lexer](https://github.com/jadejs/jade-lexer) and [parser](https://github.com/jadejs/jade-parser), we can get the [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) and analize what the flow is composed of.
 
 # Install
 `$ npm install jade-flow`
+
+# Example
+In real world, we can use this control flow model to handle multiple tasks that combined together to accomplish one goal, e.g. front end assets build includes tasks such as `concat`, `sass(less)`, `minify`, `uglify` and so on.
 
 # Lisence
 MIT

@@ -1,20 +1,17 @@
 'use strict';
 
 var assert = require('assert');
-var path = require('path');
 var Flow = require('..');
-var debug = require('debug')('flow:test');
 
-describe('flow test', function() {
-  it('should work', function() {
+describe('context test', function() {
+  it('this.glob should work', function(done) {
     var flow = new Flow({
-      file: 'test/flow.jade',
+      file: 'test/context.jade',
       taskDir: 'test/tasks'
     });
 
     flow.run()
-    .then(function(ctx) {
-      debug("context: %o", ctx);
+    .then(function() {
       done();
     })
     .catch(function(err) {

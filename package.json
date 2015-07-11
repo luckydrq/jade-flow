@@ -6,7 +6,7 @@
     "jade"
   ],
   "scripts": {
-    "test": "DEBUG=flow* mocha --harmony test/*.test.js"
+    "test": "DEBUG=flow:test:ctx mocha --harmony test/*.test.js"
   },
   "author": "luckydrq<drqzju@gmail.com>",
   "repository": {
@@ -15,10 +15,12 @@
   },
   "dependencies": {
     "co": "^4.5.4",
+    "glob": "^5.0.13",
     "jade-lexer": "0.0.8",
     "jade-parser": "0.0.8",
     "koa-compose": "^2.3.0",
-    "node-path-extras": "~0.3.0"
+    "node-path-extras": "~0.3.0",
+    "thunkify": "^2.1.2"
   },
   "devDependencies": {
     "co-mocha": "~1.1.2",
