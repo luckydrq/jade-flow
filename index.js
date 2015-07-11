@@ -14,6 +14,13 @@ var isAbsolute = require('node-path-extras').isAbsolute;
 
 module.exports = Flow;
 
+/**
+ * Initialize a control flow
+ *
+ * @param {Object}
+ * @return {Flow}
+ * @api public
+ */
 function Flow(options) {
   if (!(this instanceof Flow)) return new Flow(options);
 
@@ -25,17 +32,25 @@ function Flow(options) {
   this.tasks = [];
   this.inited = false;
 
-  this.init();
+  this._init();
 }
 
-Flow.prototype.init = function init() {
+/**
+ * init flow
+ *
+ * @api private
+ */
+Flow.prototype._init = function _init() {
   if (this.inited) return;
 
-  this.buildTasks();
+  this._buildTasks();
   this.inited = true;
 };
 
-Flow.prototype.buildTasks = function buildTasks() {
+/**
+ * @api private
+ */
+Flow.prototype._buildTasks = function _buildTasks() {
   var file = this.file;
   if (!isAbsolute(file)) {
     file = path.join(process.cwd(), file);
@@ -49,12 +64,15 @@ Flow.prototype.buildTasks = function buildTasks() {
   var tokens = lexer(fs.readFileSync(file, { encoding: this.encoding }), filename);
   var ast = parse(tokens, filename);
 
-  this.tasks = this.loadTasks(ast);
+  this.tasks = this._loadTasks(ast);
 
   debug('tasks: %s', JSON.stringify(this.tasks, null, '  '));
 };
 
-Flow.prototype.loadTasks = function loadTasks(ast) {
+/**
+ * @api private
+ */
+Flow.prototype._loadTasks = function _loadTasks(ast) {
   var self = this;
   var taskDir = this.taskDir;
   var tasks = [];
@@ -68,7 +86,7 @@ Flow.prototype.loadTasks = function loadTasks(ast) {
       attrs: node.attrs
     });
     if (node.block) {
-      task.children = self.loadTasks(node.block);
+      task.children = self._loadTasks(node.block);
     }
 
     // load middleware
@@ -97,6 +115,13 @@ Flow.prototype.loadTasks = function loadTasks(ast) {
   return tasks;
 };
 
+/**
+ * start running
+ *
+ * @param {Object}
+ * @return {Promise}
+ * @api public
+ */
 Flow.prototype.run = function run(ctx) {
   debug('this.tasks.length: %d', this.tasks.length);
 
@@ -112,9 +137,16 @@ Flow.prototype.run = function run(ctx) {
     });
 };
 
+/**
+ * convert the flow to a middleware
+ *
+ * @return {GeneratorFunction}
+ * @api public
+ *
+ */
 Flow.prototype.toMiddleware = function toMiddleware() {
   if (!this.inited) {
-    this.init();
+    this._init();
   }
   return compose(this.tasks);
 };
